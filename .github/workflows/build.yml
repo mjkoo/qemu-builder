@@ -52,10 +52,13 @@ jobs:
         shell: msys2 {0}
         run: |
           pwd
-          find / -name "curses.h"
+          env
+          ls /clang64
+          ls /clang64/include
+          ls /clang64/include/ncurses
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
-          CFLAGS='-I/clang64/include/ncurses' ./configure \
-            '--prefix=${{ github.workspace }}/out' \
+          C_INCLUDE_PATH=/clang64/include/ncurses ./configure \
+            --prefix="${MINGW_PREFIX}" \
             --disable-werror \
             --static \
             --enable-strip \
