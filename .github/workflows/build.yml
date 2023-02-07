@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v3
         with:
           key: qemu-${{ matrix.branch }}-${{ runner.os }}
-          path: qemu
+          path: ${{ github.workspace }}/qemu
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
         name: Check out code
         uses: actions/checkout@v3
