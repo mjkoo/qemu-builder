@@ -41,6 +41,7 @@ jobs:
             ninja
             patch
             mingw-w64-${{matrix.env}}-glib2
+            mingw-w64-${{matrix.env}}-libiconv
             mingw-w64-${{matrix.env}}-libslirp
             mingw-w64-${{matrix.env}}-pixman
             mingw-w64-${{matrix.env}}-python
@@ -50,7 +51,7 @@ jobs:
         shell: msys2 {0}
         run: |
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
-          C_INCLUDE_PATH=/clang64/include/ncurses ./configure \
+          LDFLAGS=-liconv ./configure \
             --prefix="${MINGW_PREFIX}" \
             --disable-werror \
             --static \
