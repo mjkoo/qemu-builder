@@ -18,7 +18,7 @@ jobs:
         id: cache-checkout
         uses: actions/cache@v3
         with:
-          key: qemu-${{ branch }}-${{ runner.os }}
+          key: qemu-${{ matrix.branch }}-${{ runner.os }}
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
         name: Check out code
         uses: actions/checkout@v3
