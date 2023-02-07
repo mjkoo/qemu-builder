@@ -60,6 +60,7 @@ jobs:
             --target-list=x86_64-softmmu \
             --without-default-features \
             --without-default-devices \
+            --enable-iconv \
             --enable-slirp \
             --enable-tcg \
             --enable-whpx \
