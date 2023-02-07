@@ -1,9 +1,9 @@
 name: Build
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 jobs:
   build-windows:
@@ -40,19 +40,19 @@ jobs:
             make
             ninja
             patch
-            mingw-w64-${{matrix.env}}-glib2
-            mingw-w64-${{matrix.env}}-libiconv
-            mingw-w64-${{matrix.env}}-libslirp
-            mingw-w64-${{matrix.env}}-pixman
-            mingw-w64-${{matrix.env}}-python
-            mingw-w64-${{matrix.env}}-toolchain
+            mingw-w64-${{ matrix.env }}-glib2
+            mingw-w64-${{ matrix.env }}-libiconv
+            mingw-w64-${{ matrix.env }}-libslirp
+            mingw-w64-${{ matrix.env }}-pixman
+            mingw-w64-${{ matrix.env }}-python
+            mingw-w64-${{ matrix.env }}-toolchain
       - name: Build
-        working-directory: ${{github.workspace}}\qemu
+        working-directory: ${{ github.workspace }}\qemu
         shell: msys2 {0}
         run: |
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           LDFLAGS=-liconv ./configure \
-            --prefix="${MINGW_PREFIX}" \
+            '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
             --enable-strip \
@@ -67,3 +67,7 @@ jobs:
             --enable-whpx \
             --enable-zstd || cat build/meson-logs/meson-log.txt
           ninja -C build install
+      - uses: actions/upload-artifact@v3
+        with:
+          name: qemu-${{ matrix.branch }}-mingw-${{ matrix.env }}
+          path: ${{ github.workspace }}/out
