@@ -14,14 +14,16 @@ jobs:
           - { sys: clang64, env: clang-x86_64, branch: v7.2.0 }
 #           - { sys: clang32, env: clang-i686, branch: v7.2.0 }
     steps:
-      - name: Cache checked out code
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Cache checked out qemu code
         id: cache-checkout
         uses: actions/cache@v3
         with:
           key: qemu-${{ matrix.branch }}-${{ runner.os }}
           path: ${{ github.workspace }}/qemu
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
-        name: Check out code
+        name: Check out qemu
         uses: actions/checkout@v3
         with:
           repository: qemu/qemu
@@ -42,6 +44,7 @@ jobs:
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
         run: |
+          patch -p1 < ../win-clang-disable-safe-stack.patch
           ./configure \
             --static \
             --enable-strip \
