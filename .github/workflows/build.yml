@@ -51,6 +51,7 @@ jobs:
         run: |
           patch -p1 < ../win-clang-disable-safe-stack.patch
           ./configure \
+            --prefix=${{ github.workspace }}/out \
             --disable-werror \
             --static \
             --enable-strip \
@@ -62,3 +63,4 @@ jobs:
             --enable-tcg \
             --enable-whpx \
             --enable-zstd
+          ninja -C build install
