@@ -11,22 +11,29 @@ jobs:
     strategy:
       matrix:
         include:
-          - { sys: clang64, env: clang-x86_64 }
-#           - { sys: clang32, env: clang-i686 }
+          - { sys: clang64, env: clang-x86_64, branch: v7.2.0 }
+#           - { sys: clang32, env: clang-i686, branch: v7.2.0 }
     steps:
-      - name: Set up build environment
-        uses: msys2/setup-msys2@v2
+      - name: Cache checked out code
+        id: cache-checkout
+        uses: actions/cache@v3
         with:
-          msystem: ${{matrix.sys}}
-          install: |
-            mingw-w64-${{matrix.env}}-python
-      - name: Check out code
+          key: qemu-${{ branch }}-${{ runner.os }}
+      - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
+        name: Check out code
         uses: actions/checkout@v3
         with:
           repository: qemu/qemu
           ref: v7.2.0
           submodules: true
           path: qemu
+      - name: Set up build environment
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.sys}}
+          install: |
+            mingw-w64-${{matrix.env}}-python
+            mingw-w64-${{matrix.env}}-toolchain
       - name: Build
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
