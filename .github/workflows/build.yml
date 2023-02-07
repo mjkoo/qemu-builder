@@ -35,6 +35,7 @@ jobs:
           install: |
             make
             ninja
+            mingw-w64-${{matrix.env}}-glib2
             mingw-w64-${{matrix.env}}-python
             mingw-w64-${{matrix.env}}-toolchain
       - name: Build
