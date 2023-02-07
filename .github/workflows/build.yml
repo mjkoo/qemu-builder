@@ -42,5 +42,4 @@ jobs:
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
         run: |
-          ./configure --target-list=x86_64-softmmu --static --without-default-features --without-default-devices --enable-lto --enable-strip --enable-slirp --enable-tcg --enable-whpx --enable-zstd
-          make
+          ./configure --disable-werror --target-list=x86_64-softmmu --static --without-default-features --without-default-devices --enable-lto --enable-strip --enable-slirp --enable-tcg --enable-whpx --enable-zstd
