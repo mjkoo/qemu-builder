@@ -43,7 +43,7 @@ jobs:
             mingw-w64-${{matrix.env}}-glib2
             mingw-w64-${{matrix.env}}-libiconv
             mingw-w64-${{matrix.env}}-libslirp
-            mingw-w64-${{matrix.env}}-pdcurses
+            mingw-w64-${{matrix.env}}-ncurses
             mingw-w64-${{matrix.env}}-pixman
             mingw-w64-${{matrix.env}}-python
             mingw-w64-${{matrix.env}}-toolchain
@@ -67,4 +67,4 @@ jobs:
             --enable-tcg \
             --enable-whpx \
             --enable-zstd
-          ninja -C build install
+          ninja -v -C build install
