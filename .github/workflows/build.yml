@@ -47,6 +47,7 @@ jobs:
         run: |
           patch -p1 < ../win-clang-disable-safe-stack.patch
           ./configure \
+            --disable-werror \
             --static \
             --enable-strip \
             --enable-lto \
