@@ -51,6 +51,8 @@ jobs:
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
         run: |
+          pwd
+          find / -name "curses.h"
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           CFLAGS='-I/clang64/include/ncurses' ./configure \
             '--prefix=${{ github.workspace }}/out' \
