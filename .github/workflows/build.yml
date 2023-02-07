@@ -38,6 +38,7 @@ jobs:
             diffutils
             git
             make
+            ncurses-devel
             ninja
             patch
             mingw-w64-${{matrix.env}}-glib2
