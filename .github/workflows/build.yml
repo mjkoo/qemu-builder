@@ -49,9 +49,7 @@ jobs:
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
         run: |
-          if ! patch --dry-run --reverse --force < ../win-clang-disable-safe-stack.patch >/dev/null 2>&1; then
-            patch -Np1 < ../win-clang-disable-safe-stack.patch
-          fi
+          patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
