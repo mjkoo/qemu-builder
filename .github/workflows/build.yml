@@ -44,6 +44,7 @@ jobs:
             mingw-w64-${{matrix.env}}-libiconv
             mingw-w64-${{matrix.env}}-libslirp
             mingw-w64-${{matrix.env}}-ncurses
+            mingw-w64-${{matrix.env}}-pdcurses
             mingw-w64-${{matrix.env}}-pixman
             mingw-w64-${{matrix.env}}-python
             mingw-w64-${{matrix.env}}-toolchain
@@ -51,11 +52,6 @@ jobs:
         working-directory: ${{github.workspace}}\qemu
         shell: msys2 {0}
         run: |
-          pwd
-          env
-          ls /clang64
-          ls /clang64/include
-          ls /clang64/include/ncurses
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           C_INCLUDE_PATH=/clang64/include/ncurses ./configure \
             --prefix="${MINGW_PREFIX}" \
@@ -71,5 +67,5 @@ jobs:
             --enable-slirp \
             --enable-tcg \
             --enable-whpx \
-            --enable-zstd
+            --enable-zstd || cat build/meson-logs/meson-log.txt
           ninja -C build install
