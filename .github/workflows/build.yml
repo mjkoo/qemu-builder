@@ -41,6 +41,7 @@ jobs:
             ninja
             patch
             mingw-w64-${{matrix.env}}-glib2
+            mingw-w64-${{matrix.env}}-libiconv
             mingw-w64-${{matrix.env}}-libslirp
             mingw-w64-${{matrix.env}}-pixman
             mingw-w64-${{matrix.env}}-python
