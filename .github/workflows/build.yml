@@ -47,8 +47,8 @@ jobs:
             --enable-strip \
             --disable-werror \
             --enable-lto \
-            --disable-safe-stack \
             --target-list=x86_64-softmmu \
+            --with-coroutine=ucontext \
             --without-default-features \
             --without-default-devices \
             --enable-slirp \
