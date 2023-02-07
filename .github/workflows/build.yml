@@ -45,10 +45,8 @@ jobs:
           ./configure \
             --static \
             --enable-strip \
-            --disable-werror \
             --enable-lto \
             --target-list=x86_64-softmmu \
-            --with-coroutine=ucontext \
             --without-default-features \
             --without-default-devices \
             --enable-slirp \
