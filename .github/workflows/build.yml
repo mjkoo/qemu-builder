@@ -53,7 +53,7 @@ jobs:
             patch -Np1 < ../win-clang-disable-safe-stack.patch
           fi
           ./configure \
-            --prefix=${{ github.workspace }}/out \
+            '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
             --enable-strip \
