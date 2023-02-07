@@ -18,11 +18,6 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{matrix.sys}}
-          install: |
-            meson
-            mingw-w64-${{matrix.env}}-gettext
-            mingw-w64-${{matrix.env}}-glib
-            mingw-w64-${{matrix.env}}-pkg-config
       - name: Check out code
         uses: actions/checkout@v3
         with:
