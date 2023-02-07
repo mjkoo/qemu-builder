@@ -52,7 +52,7 @@ jobs:
         shell: msys2 {0}
         run: |
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
-          ./configure \
+          CFLAGS='-I/clang64/include/ncurses' ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
@@ -67,4 +67,4 @@ jobs:
             --enable-tcg \
             --enable-whpx \
             --enable-zstd
-          ninja -v -C build install
+          ninja -C build install
