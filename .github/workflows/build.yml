@@ -43,6 +43,7 @@ jobs:
             mingw-w64-${{matrix.env}}-glib2
             mingw-w64-${{matrix.env}}-libiconv
             mingw-w64-${{matrix.env}}-libslirp
+            mingw-w64-${{matrix.env}}-ncurses
             mingw-w64-${{matrix.env}}-pixman
             mingw-w64-${{matrix.env}}-python
             mingw-w64-${{matrix.env}}-toolchain
@@ -60,6 +61,7 @@ jobs:
             --target-list=x86_64-softmmu \
             --without-default-features \
             --without-default-devices \
+            --enable-curses \
             --enable-iconv \
             --enable-slirp \
             --enable-tcg \
