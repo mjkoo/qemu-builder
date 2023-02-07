@@ -12,12 +12,14 @@ jobs:
       matrix:
         include:
           - { sys: clang64, env: clang-x86_64 }
-          - { sys: clang32, env: clang-i686 }
+#           - { sys: clang32, env: clang-i686 }
     steps:
       - name: Set up build environment
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{matrix.sys}}
+          install: |
+            mingw-w64-${{matrix.env}}-python
       - name: Check out code
         uses: actions/checkout@v3
         with:
