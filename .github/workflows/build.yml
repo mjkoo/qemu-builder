@@ -20,7 +20,7 @@ jobs:
         id: cache-checkout
         uses: actions/cache@v3
         with:
-          key: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
+          key: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/qemu
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
         name: Check out qemu
@@ -89,7 +89,7 @@ jobs:
         id: cache-checkout
         uses: actions/cache@v3
         with:
-          key: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.env }}
+          key: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
           path: ${{ github.workspace }}/qemu
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
         name: Check out qemu
