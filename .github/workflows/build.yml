@@ -17,12 +17,12 @@ jobs:
           - { arch: x86_64, cc: clang, cxx: clang++, ld: lld }
     steps:
       - name: Cache checked out qemu code
-        id: cache-checkout
+        id: cache-checkout-linux
         uses: actions/cache@v3
         with:
           key: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/qemu
-      - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-checkout-linux.outputs.cache-hit != 'true' }}
         name: Check out qemu
         uses: actions/checkout@v3
         with:
@@ -51,12 +51,12 @@ jobs:
         run: |
           git clone https://gitlab.freedesktop.org/slirp/libslirp.git -b v$SLIRP_VERSION
           cd libslirp
-          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} meson setup -Ddefault_library=static build
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} CC_LD=${{ matrix.ld }} meson setup -Ddefault_library=static build
           sudo ninja -C build install
       - name: Build qemu
         working-directory: ${{ github.workspace }}/qemu
         run: |
-          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} LD=${{ matrix.ld }} ./configure \
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} CC_LD=${{ matrix.ld }} ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
@@ -88,12 +88,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
       - name: Cache checked out qemu code
-        id: cache-checkout
+        id: cache-checkout-windows
         uses: actions/cache@v3
         with:
           key: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
           path: ${{ github.workspace }}/qemu
-      - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
+      - if: ${{ steps.cache-checkout-windows.outputs.cache-hit != 'true' }}
         name: Check out qemu
         uses: actions/checkout@v3
         with:
