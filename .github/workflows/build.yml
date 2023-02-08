@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - { arch: x86_64, cc: clang, cxx: clang++ }
+          - { arch: x86_64, cc: clang, cxx: clang++, ld: lld }
     steps:
       - name: Cache checked out qemu code
         id: cache-checkout
@@ -36,6 +36,7 @@ jobs:
             build-essential \
             clang \
             git \
+            lld \
             libglib2.0-dev \
             libpixman-1-dev \
             libzstd-dev \
@@ -53,7 +54,7 @@ jobs:
       - name: Build qemu
         working-directory: ${{ github.workspace }}/qemu
         run: |
-          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} ./configure \
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} LD=${{ matrix.ld }} ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
