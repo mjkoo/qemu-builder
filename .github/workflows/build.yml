@@ -6,13 +6,77 @@ on:
     branches: ["main"]
   workflow_dispatch:
 jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { arch: x86_64, cc: clang, cxx: clang++ branch: v7.2.0 }
+    steps:
+      - name: Cache checked out qemu code
+        id: cache-checkout
+        uses: actions/cache@v3
+        with:
+          key: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
+          path: ${{ github.workspace }}/qemu
+      - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
+        name: Check out qemu
+        uses: actions/checkout@v3
+        with:
+          repository: qemu/qemu
+          ref: v7.2.0
+          submodules: true
+          path: qemu
+      - name: Set up build environment
+        run: |
+          sudo apt-get install -y \
+            build-essential \
+            clang \
+            git \
+            libglib2.0-dev \
+            libpixman-1-dev \
+            libzstd-dev \
+            pkg-config \
+            python3 \
+            ninja-build \
+      - name: Build slirp
+        working-directory: ${{ github.workspace }}
+        run: |
+          git clone https://gitlab.freedesktop.org/slirp/libslirp.git -b 4.7.0
+          cd libslirp
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} meson setup -Ddefault_library=static build
+          ninja -C build install
+      - name: Build qemu
+        working-directory: ${{ github.workspace }}/qemu
+        run: |
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} ./configure \
+            '--prefix=${{ github.workspace }}/out' \
+            --disable-werror \
+            --static \
+            --enable-strip \
+            --enable-lto \
+            --enable-safe-stack \
+            --target-list=x86_64-softmmu \
+            --without-default-features \
+            --without-default-devices \
+            --disable-curses \
+            --disable-iconv \
+            --enable-slirp \
+            --enable-tcg \
+            --enable-whpx \
+            --enable-zstd
+          ninja -C build install
+      - uses: actions/upload-artifact@v3
+        with:
+          name: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
+          path: ${{ github.workspace }}/out
   build-windows:
     runs-on: windows-latest
     strategy:
       matrix:
         include:
           - { sys: clang64, env: clang-x86_64, branch: v7.2.0 }
-#           - { sys: clang32, env: clang-i686, branch: v7.2.0 }
+          - { sys: clang32, env: clang-i686, branch: v7.2.0 }
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -20,7 +84,7 @@ jobs:
         id: cache-checkout
         uses: actions/cache@v3
         with:
-          key: qemu-${{ matrix.branch }}-${{ runner.os }}
+          key: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.env }}
           path: ${{ github.workspace }}/qemu
       - if: ${{ steps.cache-checkout.outputs.cache-hit != 'true' }}
         name: Check out qemu
@@ -65,9 +129,9 @@ jobs:
             --enable-slirp \
             --enable-tcg \
             --enable-whpx \
-            --enable-zstd || cat build/meson-logs/meson-log.txt
+            --enable-zstd
           ninja -C build install
       - uses: actions/upload-artifact@v3
         with:
-          name: qemu-${{ matrix.branch }}-mingw-${{ matrix.env }}
+          name: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.env }}
           path: ${{ github.workspace }}/out
