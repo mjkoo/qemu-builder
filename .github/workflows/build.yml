@@ -49,7 +49,7 @@ jobs:
           git clone https://gitlab.freedesktop.org/slirp/libslirp.git -b v$SLIRP_VERSION
           cd libslirp
           CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} meson setup -Ddefault_library=static build
-          ninja -C build install
+          sudo ninja -C build install
       - name: Build qemu
         working-directory: ${{ github.workspace }}/qemu
         run: |
@@ -117,6 +117,8 @@ jobs:
       - name: Build
         working-directory: ${{ github.workspace }}\qemu
         shell: msys2 {0}
+        env:
+          WHPX_FLAG: ${{ endsWith(matrix.sys, "64") && '--enable-whpx' || '--disable-whpx' }}
         run: |
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           LDFLAGS=-liconv ./configure \
@@ -132,8 +134,8 @@ jobs:
             --disable-iconv \
             --enable-slirp \
             --enable-tcg \
-            --enable-whpx \
-            --enable-zstd
+            --enable-zstd \
+            $WHPX_FLAG
           ninja -C build install
       - uses: actions/upload-artifact@v3
         with:
