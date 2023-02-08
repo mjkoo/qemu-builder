@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - { arch: x86_64, cc: clang, cxx: clang++, ld: lld }
+          - { arch: x86_64, cc: clang, cxx: clang++, ld: clang }
     steps:
       - name: Cache checked out qemu code
         id: cache-checkout-linux
@@ -72,7 +72,8 @@ jobs:
             --enable-tcg \
             --enable-kvm \
             --enable-zstd
-          ninja -C build install
+          ninja -v -C build install
+          rm '${{ github.workspace }}/out/edk2-a*.fd'
       - uses: actions/upload-artifact@v3
         with:
           name: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.cc }}-${{ matrix.arch }}
@@ -140,6 +141,7 @@ jobs:
             --enable-zstd \
             $WHPX_FLAG
           ninja -C build install
+          rm '${{ github.workspace }}/out/edk2-a*.fd'
       - uses: actions/upload-artifact@v3
         with:
           name: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
