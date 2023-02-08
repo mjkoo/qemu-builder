@@ -32,6 +32,7 @@ jobs:
           path: qemu
       - name: Set up build environment
         run: |
+          sudo apt --purge remove -y clang lld
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 15
@@ -56,7 +57,7 @@ jobs:
       - name: Build qemu
         working-directory: ${{ github.workspace }}/qemu
         run: |
-          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} CC_LD=${{ matrix.ld }} ./configure \
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} LDFLAGS="-fuse-ld=lld" ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
