@@ -1,13 +1,13 @@
 name: Build
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
   workflow_dispatch:
 env:
-  QEMU_VERSION: "7.2.0"
-  SLIRP_VERSION: "4.7.0"
+  QEMU_VERSION: '7.2.0'
+  SLIRP_VERSION: '4.7.0'
 jobs:
   build-linux:
     runs-on: ubuntu-latest
@@ -118,7 +118,7 @@ jobs:
         working-directory: ${{ github.workspace }}\qemu
         shell: msys2 {0}
         env:
-          WHPX_FLAG: ${{ endsWith(matrix.sys, "64") && '--enable-whpx' || '--disable-whpx' }}
+          WHPX_FLAG: ${{ endsWith(matrix.sys, '64') && '--enable-whpx' || '--disable-whpx' }}
         run: |
           patch -Np1 < ../win-clang-disable-safe-stack.patch || true
           LDFLAGS=-liconv ./configure \
