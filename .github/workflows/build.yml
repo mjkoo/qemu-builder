@@ -32,7 +32,7 @@ jobs:
           path: qemu
       - name: Set up build environment
         run: |
-          sudo apt --purge remove -y clang lld
+          sudo apt-get --purge remove -y clang lld
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh 15
@@ -57,7 +57,7 @@ jobs:
       - name: Build qemu
         working-directory: ${{ github.workspace }}/qemu
         run: |
-          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} LDFLAGS="-fuse-ld=lld" ./configure \
+          CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} CC_LD=${{ matrix.ld }} ./configure \
             '--prefix=${{ github.workspace }}/out' \
             --disable-werror \
             --static \
@@ -73,7 +73,7 @@ jobs:
             --enable-tcg \
             --enable-kvm \
             --enable-zstd
-          ninja -v -C build install
+          ninja -C build install
           rm '${{ github.workspace }}/out/edk2-a*.fd'
       - uses: actions/upload-artifact@v3
         with:
