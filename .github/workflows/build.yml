@@ -42,7 +42,7 @@ jobs:
       - name: Build slirp
         working-directory: ${{ github.workspace }}
         run: |
-          git clone https://gitlab.freedesktop.org/slirp/libslirp.git -b 4.7.0
+          git clone https://gitlab.freedesktop.org/slirp/libslirp.git -b v4.7.0
           cd libslirp
           CC=${{ matrix.cc }} CXX=${{ matrix.cxx }} meson setup -Ddefault_library=static build
           ninja -C build install
