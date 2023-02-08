@@ -67,7 +67,7 @@ jobs:
             --disable-iconv \
             --enable-slirp \
             --enable-tcg \
-            --enable-whpx \
+            --enable-kvm \
             --enable-zstd
           ninja -C build install
       - uses: actions/upload-artifact@v3
