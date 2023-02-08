@@ -32,11 +32,10 @@ jobs:
           path: qemu
       - name: Set up build environment
         run: |
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
           sudo apt-get install -y \
             build-essential \
-            clang \
             git \
-            lld \
             libglib2.0-dev \
             libpixman-1-dev \
             libzstd-dev \
@@ -140,5 +139,5 @@ jobs:
           ninja -C build install
       - uses: actions/upload-artifact@v3
         with:
-          name: qemu-${{ matrix.branch }}-${{ runner.os }}-${{ matrix.env }}
+          name: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
           path: ${{ github.workspace }}/out
