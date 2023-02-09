@@ -90,7 +90,6 @@ jobs:
             --enable-zstd \
             $WHPX_FLAG
           ninja -C build install
-          rm '${{ github.workspace }}/out/share/edk2-a*.fd'
       - uses: actions/upload-artifact@v3
         with:
           name: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
