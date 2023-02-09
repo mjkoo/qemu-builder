@@ -20,9 +20,9 @@ jobs:
             --build-arg QEMU_VERSION=${{ env.QEMU_VERSION}} \
             --build-arg SLIRP_VERSION=${{ env.SLIRP_VERSION}} \
             -t qemu-${{ env.QEMU_VERSION }} - < Dockerfile
-          docker create --name qemu-${{ env.QEMU_VERSION }} /does-not-exist
-          docker cp qemu-${{ env.QEMU_VERSION }}:out .
-          docker rm -f qemu-${{ env.QEMU_VERSION }}
+          docker create --name qemu-build qemu-${{ env.QEMU_VERSION }} /does-not-exist
+          docker cp qemu-build:out .
+          docker rm -f qemu-build
       - uses: actions/upload-artifact@v3
         with:
           name: qemu-${{ env.QEMU_VERSION}}-${{ runner.os }}-${{ runner.arch }}
@@ -90,7 +90,7 @@ jobs:
             --enable-zstd \
             $WHPX_FLAG
           ninja -C build install
-          rm '${{ github.workspace }}/out/edk2-a*.fd'
+          rm '${{ github.workspace }}/out/share/edk2-a*.fd'
       - uses: actions/upload-artifact@v3
         with:
           name: qemu-${{ env.QEMU_VERSION }}-${{ runner.os }}-${{ matrix.env }}
